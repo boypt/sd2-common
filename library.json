@@ -1,0 +1,14 @@
+{
+  "name": "SD2Common",
+  "version": "0.1.0",
+  "description": "SD2 小电视（ESP8266 + ST7789 240x240）固件公共库：WiFi 连接状态机、NTP 校时、定时休眠、背光控制、轻量 HTTP 客户端、通用格式化。供多个 SD2 固件项目复用。",
+  "keywords": ["esp8266", "sd2", "tft", "wifi", "http", "ntp", "sleep"],
+  "authors": [
+    {
+      "name": "Joee-D"
+    }
+  ],
+  "license": "MIT",
+  "frameworks": ["arduino"],
+  "platforms": ["espressif8266"]
+}
