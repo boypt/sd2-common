@@ -9,7 +9,7 @@
 | `Sd2Wifi.h` | WiFi STA 连接状态机：自动重连、连接/断开边沿 |
 | `Sd2Time.h` | NTP 校时、本地小时、本地时间格式化 |
 | `Sd2Sleep.h` | 跨午夜休眠窗口判断 + 休眠状态机（进入/退出回调） |
-| `Sd2Backlight.h` | 背光控制：反相 PWM / 正相 PWM / 低电平点亮 |
+| `Sd2Backlight.h` | 背光控制：反相 PWM / 正相 PWM / 低电平点亮（0~1023 越大越亮） |
 | `Sd2Http.h` | 轻量 HTTP：读响应、拆 header/body、解析状态码、解 chunked、明文 GET |
 | `Sd2Format.h` | 数字字符串清理、速率格式化（64px 大数字） |
 
@@ -30,6 +30,8 @@ extra_configs = ../sd2-common/platformio/sd2-st7789.ini
 ```
 
 工程自己的 `[env:nodemcuv2]` 会与公共片段自动合并，只需保留自身差异（额外的字体宏、依赖）。
+
+屏幕驱动、SPI 引脚、分辨率等硬件常量已固化在 [`platformio/tft_setup.h`](platformio/tft_setup.h)，TFT_eSPI 会通过 `-I` 路径自动加载（`${common.sd2_flags}` 指向它）。硬件固定后这些不属于用户配置，新工程无需再写一长串 `-D` 宏。
 
 ## 使用示例
 

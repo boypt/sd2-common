@@ -19,9 +19,10 @@ void Backlight::setBrightness(int brightness) {
             analogWrite(pin_, brightness_);
             break;
         case SWITCH_ACTIVE_LOW:
-            // 保留原固件驱动序列（INPUT -> analogWrite -> OUTPUT），占空比即亮度
+            // 低电平点亮：亮度越大占空比越小。
+            // 保留原固件驱动序列（INPUT -> analogWrite -> OUTPUT）。
             pinMode(pin_, INPUT);
-            analogWrite(pin_, brightness_);
+            analogWrite(pin_, 1023 - brightness_);
             pinMode(pin_, OUTPUT);
             break;
     }
