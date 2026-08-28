@@ -24,7 +24,7 @@ public:
 
     // 与老工程全局变量同名，方便直接沿用现有绘制代码
     bool bootDone = false;
-    bool ntpDone = false;
+    bool ntpDone = false;  // NTP 同步后由 App 自动置位
     bool wifiFailShown = false;
     uint32_t bootStart = 0;
     uint32_t lastFetchMs = 0;
@@ -35,6 +35,10 @@ public:
         : sleep(sleepStartHour, sleepEndHour),
           backlight(5, Backlight::PWM_INVERTED),
           pollMs_(pollIntervalMs) {}
+
+    // 无轮询工程（如时钟）不需要伪造轮询间隔
+    App(int sleepStartHour, int sleepEndHour)
+        : App(0, sleepStartHour, sleepEndHour) {}
 
     void setHooks(BoolFn drawBootPage, Fn onTick,
                   Fn onConnected = nullptr, Fn onDisconnected = nullptr,

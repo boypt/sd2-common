@@ -40,7 +40,11 @@ void App::begin(const char *ssid, const char *pass, int brightness,
 
 void App::loop() {
     handleWiFi();
-    if (tick_) tick_();
+    if (!ntpDone && sd2::timeSynced()) {
+        ntpDone = true;
+        Serial.printf("NTP time synced: %lu\n", (unsigned long)time(nullptr));
+    }
+    if (ntpDone && tick_) tick_(); // 校时前不拉取/刷新，证书与时钟显示才可用
 
     if (millis() - lastSleepCheck >= 1000) {
         lastSleepCheck = millis();
@@ -60,7 +64,7 @@ void App::handleWiFi() {
         Serial.print("WiFi connected, IP: ");
         Serial.println(wifi.ip().c_str());
         bootDone = true;
-        if (onConnected_) onConnected_();
+        if (!sleep.sleeping() && onConnected_) onConnected_();
         timeBegin(tzOffsetSec_, ntpServer_);
         lastFetchMs = millis() - pollMs_; // 立即拉取/更新时间
     }

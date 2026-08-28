@@ -1,5 +1,7 @@
 #include "Sd2Https.h"
 
+#include <Esp.h>
+
 namespace sd2 {
 
 Https::Https(const char *pem, bool verifyTlsCert)
@@ -8,6 +10,7 @@ Https::Https(const char *pem, bool verifyTlsCert)
 bool Https::get(const char *host, const char *path, const char *bearerToken,
                 const char *userAgent, HttpResponse &out, String &error,
                 uint32_t timeoutMs) {
+    ESP.wdtDisable(); // TLS 握手/读取为阻塞操作，暂时关闭软看门狗
     WiFiClientSecure client;
     if (verifyTlsCert_) {
         client.setTrustAnchors(&trust_);
@@ -23,6 +26,7 @@ bool Https::get(const char *host, const char *path, const char *bearerToken,
         Serial.printf("TLS connect failed after %lu ms, ssl=%s\n",
                       (unsigned long)(millis() - t0), sslErr);
         error = "Network error";
+        ESP.wdtEnable(0);
         return false;
     }
 
@@ -36,6 +40,7 @@ bool Https::get(const char *host, const char *path, const char *bearerToken,
     client.flush();
 
     out = readHttpResponse(client, timeoutMs);
+    ESP.wdtEnable(0);
     if (!out.complete) {
         error = "Network error";
         return false;
