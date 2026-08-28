@@ -6,6 +6,8 @@
 #include "Sd2Backlight.h"
 #include "Sd2Format.h"
 #include "Sd2Http.h"
+#include "Sd2Https.h"
 #include "Sd2Sleep.h"
+#include "Sd2Theme.h"
 #include "Sd2Time.h"
 #include "Sd2Wifi.h"
