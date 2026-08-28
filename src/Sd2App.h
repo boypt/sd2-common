@@ -5,6 +5,7 @@
 
 #include "Sd2Backlight.h"
 #include "Sd2Sleep.h"
+#include "Sd2Time.h"
 #include "Sd2Wifi.h"
 
 namespace sd2 {
