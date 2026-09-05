@@ -9,7 +9,7 @@ Https::Https(const char *pem, bool verifyTlsCert)
 
 bool Https::get(const char *host, const char *path, const char *bearerToken,
                 const char *userAgent, HttpResponse &out, String &error,
-                uint32_t timeoutMs) {
+                uint32_t timeoutMs, const char *extraHeader) {
     ESP.wdtDisable(); // TLS 握手/读取为阻塞操作，暂时关闭软看门狗
     WiFiClientSecure client;
     if (verifyTlsCert_) {
@@ -35,7 +35,11 @@ bool Https::get(const char *host, const char *path, const char *bearerToken,
                  "Authorization: Bearer " + String(bearerToken) + "\r\n" +
                  "User-Agent: " + String(userAgent) + "\r\n" +
                  "Accept: application/json\r\n" +
-                 "Connection: close\r\n\r\n";
+                 "Connection: close\r\n";
+    if (extraHeader != nullptr && extraHeader[0] != '\0') {
+        req += String(extraHeader) + "\r\n";
+    }
+    req += "\r\n";
     client.print(req);
     client.flush();
 

@@ -14,9 +14,10 @@ public:
     Https(const char *pem, bool verifyTlsCert = true);
 
     // 完成连接 + GET；out 返回 header/body；error 给中文错误描述
+    // extraHeader: 可选额外请求头（完整 "Name: value" 行），nullptr 表示不加
     bool get(const char *host, const char *path, const char *bearerToken,
              const char *userAgent, HttpResponse &out, String &error,
-             uint32_t timeoutMs = 8000);
+             uint32_t timeoutMs = 8000, const char *extraHeader = nullptr);
 
 private:
     BearSSL::X509List trust_;
