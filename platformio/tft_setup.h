@@ -5,7 +5,10 @@
 // 所有 SD2 固件工程共用；硬件固定后不属于用户配置，无需修改。
 
 // ---- 驱动与分辨率 ----
-#define ST7789_DRIVER
+// SD2 的 1.54" 240x240 方屏（ST7789 初始化子集变体）必须用 ST7789_2_DRIVER：
+// 完整 ST7789_DRIVER 的初始化会下发 ST7789V 的电源/伽马/时序参数并设置
+// 240x320 地址窗口，该屏不接受，导致背光常亮但屏幕全黑。
+#define ST7789_2_DRIVER
 #define TFT_WIDTH  240
 #define TFT_HEIGHT 240
 
