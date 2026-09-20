@@ -1,5 +1,7 @@
 #include "Sd2Http.h"
 
+#include <Esp.h>
+
 namespace sd2 {
 
 int parseStatusCode(const String &statusLine) {
@@ -31,6 +33,7 @@ String dechunk(const String &s) {
 HttpResponse readHttpResponse(Client &client, uint32_t timeoutMs) {
     HttpResponse out;
     String raw;
+    raw.reserve(4096);
     uint8_t buf[128];
     uint32_t t0 = millis();
     while (millis() - t0 < timeoutMs) {
@@ -38,12 +41,12 @@ HttpResponse readHttpResponse(Client &client, uint32_t timeoutMs) {
             int n = client.read(buf, sizeof(buf));
             if (n <= 0)
                 break;
-            for (int i = 0; i < n; i++)
-                raw += (char)buf[i];
+            raw.concat((const char *)buf, (unsigned int)n);
         }
         if (!client.connected() && client.available() == 0)
             break;
         delay(1);
+        ESP.wdtFeed();
     }
 
     int hEnd = raw.indexOf("\r\n\r\n");
